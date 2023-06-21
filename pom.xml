@@ -11,4 +11,5 @@
         <maven.compiler.target>20</maven.compiler.target>
         <exec.mainClass>ec.edu.ups.practica.dos.estructura.PracticaDosEstructura</exec.mainClass>
     </properties>
+    <name>Practica2Jz</name>
 </project>

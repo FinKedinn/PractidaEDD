@@ -9,6 +9,7 @@ package ec.edu.ups.practica.dos.estructura.modelo;
  * @author ACER
  */
 public class Inventario {
+
     private Producto producto;
     private double size;
     private Pila<String> ventas;
@@ -16,87 +17,98 @@ public class Inventario {
     public Inventario() {
         this.ventas = new Pila<>();
     }
-    
 
     public Inventario(Producto producto) {
         this.producto = producto;
         this.size = 0;
         this.ventas = new Pila<>();
     }
-    
-    public Producto obtenerUltimo(){
+
+    public Producto obtenerUltimo() {
         Producto actual = producto;
-        while(actual.getSiguiente() != null){
+        while (actual.getSiguiente() != null) {
             actual = actual.getSiguiente();
         }
         return actual;
     }
-    
-    public void agregar(String nombre, String codigo, double precio, int cantidad){
+
+    public void agregar(String nombre, String codigo, double precio, int cantidad) {
         Producto nuevo = new Producto(nombre, codigo, precio, cantidad);
-        if (producto == null){
+        if (producto == null) {
             producto = nuevo;
-        } else{
+        } else {
             Producto ultimo = obtenerUltimo();
             ultimo.setSiguiente(nuevo);
         }
         size++;
     }
-    
-    public Producto buscarPorCodigo(String codigo){
+
+    public Producto buscarPorCodigo(String codigo) {
         Producto actual = producto;
-        while(actual != null){
-            if (actual.getCodigo().equals(codigo)){
+        while (actual != null) {
+            if (actual.getCodigo().equals(codigo)) {
                 return actual;
             }
+            actual = actual.getSiguiente(); // Se mueve al siguiente producto en cada iteración
         }
         return null;
     }
-    
-    public void eliminar(String codigo){
-        if (producto == null){
+
+    public Producto buscarPorNombre(String nombre) {
+        Producto actual = producto;
+        while (actual != null) {
+            if (actual.getNombre().equals(nombre)) {
+                return actual;
+            }
+            actual = actual.getSiguiente(); // Se mueve al siguiente producto en cada iteración
+        }
+        return null;
+    }
+
+    public void eliminar(String codigo) {
+        if (producto == null) {
             return;
         }
-        if (producto.getCodigo().equals(codigo)){
+        if (producto.getCodigo().equals(codigo)) {
             producto = producto.getSiguiente();
             return;
         }
         Producto anterior = producto;
         Producto actual = producto.getSiguiente();
-        while (actual != null && !actual.getCodigo().equals(codigo)){
+        while (actual != null && !actual.getCodigo().equals(codigo)) {
             anterior = actual;
             actual = actual.getSiguiente();
         }
         size--;
     }
-    
-    public void listar(){
+
+    public void listar() {
         Producto actual = producto;
-        while (actual != null){
+        while (actual != null) {
             System.out.println(actual.toString());
             actual = actual.getSiguiente();
         }
     }
-    
+
     public double getSize() {
         return size;
     }
-    
-    public void vender(String codigo){
-        Producto p = this.buscarPorCodigo(codigo);
-        String ventaProducto ="Venta:{ Codigo: " + p.getCodigo() + " Nombre: "+p.getNombre() + " Precio: " + p.getPrecio() + "}";
+
+    public void vender(String nombre) {
+        Producto p = this.buscarPorNombre(nombre);
+        String ventaProducto = "Venta: { Codigo: " + p.getCodigo() + " Nombre: " + p.getNombre() + " Precio: " + p.getPrecio() + "}";
         ventas.agregar(ventaProducto);
         int cantidad = p.getCantidad();
-        p.setCantidad(cantidad-1);
+        p.setCantidad(cantidad - 1);
     }
-    
-    public String verVentas(){
+
+    public String verVentas() {
         return ventas.toString();
     }
+
     @Override
     public String toString() {
         return "Inventario{" + "producto=" + producto + '}';
     }
-    
-    
+
 }
